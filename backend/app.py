@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
+from preprocess import preprocess_audio, reduce_noise
 from transcribe import transcribe_audio
 
 app = Flask(__name__)
@@ -30,7 +31,9 @@ def upload():
 
     try:
         # Transcribe and segment audio
-        transcription, words = transcribe_audio(file_path)
+        processed_file = preprocess_audio(file_path)
+        processed_file = reduce_noise(processed_file)
+        transcription, words = transcribe_audio(processed_file)
         return jsonify({"transcription": transcription , "words": words}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

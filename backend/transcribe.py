@@ -1,4 +1,5 @@
 import whisper
+from word_segmentation import segment_words
 
 def transcribe_audio(file_path):
     model = whisper.load_model("base")  # Load Whisper model
@@ -14,6 +15,6 @@ def transcribe_audio(file_path):
     #         "text": segment["text"]     # Transcription text
     #     })
 
-    words = transcription.split()
+    words = segment_words(transcription)
 
     return transcription, words
